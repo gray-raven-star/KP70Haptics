@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>AudioRumble</AssemblyName>
+    <Product>Audio Rumble</Product>
+    <Company>Audio Rumble</Company>
+    <Title>Audio Rumble</Title>
+    <Version>2.2.1</Version>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\KP70HapticsEngine.exe" LogicalName="KP70HapticsEngine.exe" />
+    <Resource Include="app.ico" />
+    <Resource Include="tray.ico" />
+  </ItemGroup>
+</Project>

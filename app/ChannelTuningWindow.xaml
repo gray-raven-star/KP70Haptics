@@ -1,0 +1,97 @@
+<Window x:Class="KP70Studio.ChannelTuningWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:KP70Studio"
+        Title="进阶设置" Width="758" SizeToContent="Height" MinWidth="625"
+        WindowStartupLocation="CenterOwner" Background="{DynamicResource Surface}" Foreground="{DynamicResource Text}"
+        FontFamily="Microsoft YaHei UI" FontSize="13" UseLayoutRounding="True">
+    <Window.Resources>
+        <Style x:Key="TuneTab" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{DynamicResource Muted}"/>
+            <Setter Property="Padding" Value="8,10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border x:Name="Tab" CornerRadius="7" Padding="{TemplateBinding Padding}" Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Tab" Property="Background" Value="{DynamicResource Hover}"/></Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Tab" Property="Background" Value="{DynamicResource Selected}"/>
+                                <Setter Property="Foreground" Value="{DynamicResource Accent}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="{DynamicResource Surface}">
+        <StackPanel Margin="24,19,24,19">
+            <TextBlock Text="进阶设置" FontSize="25" FontWeight="SemiBold"/>
+            <ListBox x:Name="ChannelPicker" BorderThickness="0" Background="{DynamicResource Inset}" Padding="4"
+                     ItemContainerStyle="{StaticResource TuneTab}" DisplayMemberPath="Name" SelectionChanged="ChannelChanged">
+                <ListBox.ItemsPanel><ItemsPanelTemplate><UniformGrid Rows="1"/></ItemsPanelTemplate></ListBox.ItemsPanel>
+            </ListBox>
+            <Border Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="13" Padding="15" Margin="0,12,0,10">
+                <StackPanel>
+                    <DockPanel Margin="0,0,0,8">
+                        <Button x:Name="ResetChannel" DockPanel.Dock="Right" Content="跟随主界面" Click="RestoreChannel"
+                                Style="{DynamicResource Action}" Margin="12,0,0,0"/>
+                        <TextBlock x:Name="ChannelState" VerticalAlignment="Center" Foreground="{DynamicResource Muted}"/>
+                    </DockPanel>
+                    <UniformGrid Rows="1">
+                        <StackPanel Margin="0,0,12,0">
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=Gain, StringFormat={}{0:0}}" Foreground="{DynamicResource Accent}"/><TextBlock Text="输出强度"/></DockPanel>
+                            <Slider x:Name="Gain" Maximum="100" AutomationProperties.Name="输出强度" ValueChanged="ScalarChanged"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,12,0">
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=Sensitivity, StringFormat={}{0:0}%}" Foreground="{DynamicResource Accent}"/><TextBlock Text="输入灵敏度"/></DockPanel>
+                            <Slider x:Name="Sensitivity" Minimum="10" Maximum="250" AutomationProperties.Name="输入灵敏度" ValueChanged="ScalarChanged"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=Threshold, StringFormat={}{0:0}%}" Foreground="{DynamicResource Accent}"/><TextBlock Text="触发阈值"/></DockPanel>
+                            <Slider x:Name="Threshold" Maximum="100" AutomationProperties.Name="触发阈值" ValueChanged="ScalarChanged"/>
+                        </StackPanel>
+                    </UniformGrid>
+                    <UniformGrid x:Name="TriggerPanel" Rows="2" Columns="2" Margin="0,8,0,0">
+                        <StackPanel Margin="0,0,12,6">
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=TrgStart, StringFormat={}{0:0}}" Foreground="{DynamicResource Accent}"/><TextBlock Text="阻力起点"/></DockPanel>
+                            <Slider x:Name="TrgStart" Maximum="40" AutomationProperties.Name="阻力起点" ValueChanged="TriggerChanged"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,0,6">
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=TrgFrequency, StringFormat={}{0:0}}" Foreground="{DynamicResource Accent}"/><TextBlock Text="震动频率档"/></DockPanel>
+                            <Slider x:Name="TrgFrequency" Minimum="1" Maximum="63" AutomationProperties.Name="震动频率档" ValueChanged="TriggerChanged"/>
+                        </StackPanel>
+                        <StackPanel Margin="0,0,12,0">
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=TrgBase, StringFormat={}{0:0}}" Foreground="{DynamicResource Accent}"/><TextBlock Text="基础阻力"/></DockPanel>
+                            <Slider x:Name="TrgBase" Maximum="36" AutomationProperties.Name="基础阻力" ValueChanged="TriggerChanged"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <DockPanel><TextBlock DockPanel.Dock="Right" Text="{Binding Value, ElementName=TrgKick, StringFormat={}{0:0}}" Foreground="{DynamicResource Accent}"/><TextBlock Text="反冲强度"/></DockPanel>
+                            <Slider x:Name="TrgKick" Maximum="60" AutomationProperties.Name="反冲强度" ValueChanged="TriggerChanged"/>
+                        </StackPanel>
+                    </UniformGrid>                </StackPanel>
+            </Border>
+            <Border Background="{DynamicResource Panel}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="13" Padding="15">
+                <StackPanel>
+                    <DockPanel>
+                        <Button x:Name="ResetCurve" DockPanel.Dock="Right" Content="使用原有频段" Click="RestoreCurve"
+                                Style="{DynamicResource Action}" Margin="12,0,0,0"/>
+                        <StackPanel>
+                            <TextBlock Text="频率曲线" FontSize="16" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="CurveState" Foreground="{DynamicResource Muted}" Margin="0,3,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <local:FrequencyCurve x:Name="Curve" Height="171" Margin="0,8,0,0"
+                                          AutomationProperties.Name="频率权重曲线"/>
+                    <TextBlock Text="拖动调节，双击加点，右键删点。" Foreground="{DynamicResource Muted}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </Border>
+            <Button Content="完成" IsCancel="True" Style="{DynamicResource Action}" HorizontalAlignment="Right" Margin="0,13,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
